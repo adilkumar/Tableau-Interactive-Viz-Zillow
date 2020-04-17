@@ -1,0 +1,38 @@
+library(data.table)
+library(tidyverse)
+
+setwd("C:/Users/Adil Ashish Kumar/Downloads")
+days = fread("DaysOnZillow_County.csv", header = TRUE)
+map = fread("State map.csv", header = TRUE)
+sr = fread("SaleToListRatio_County.csv", header = TRUE)
+
+days$SizeRank = NULL
+days$RegionID = NULL
+days$RegionType = NULL
+
+sr$SizeRank = NULL
+sr$RegionID = NULL
+sr$RegionType = NULL
+
+library(reshape2)
+days2 = melt(days, id.vars=c("RegionName", "StateName"))
+names(days2)[names(days2) == "variable"] <- "MY"
+names(days2)[names(days2) == "value"] <- "days"
+
+sr2 = melt(sr, id.vars=c("RegionName", "StateName"))
+names(sr2)[names(sr2) == "variable"] <- "MY"
+names(sr2)[names(sr2) == "value"] <- "SR"
+
+final[is.na(final)] <- 0
+final = inner_join(days2,sr2)
+
+final2= left_join(final,map)
+
+final2= trimws(final2)
+
+
+x <- "  Some text. "
+x
+trimws(x)
+trimws(x, "l")
+trimws(x, "r")
